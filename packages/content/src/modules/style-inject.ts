@@ -12,7 +12,8 @@ export function checkIfStyleIsInjected(): void {
 
   runtime.sendMessage({
     code: MessageCode.CHECK_IF_STYLE_IS_INJECTED,
-    injected: document.querySelector('style[data-simple-facebook-customizer]') instanceof Element,
+    origin: window.location.origin,
+    injected: document.querySelector('style[data-simple-website-customizer]') instanceof Element,
   });
 }
 
@@ -29,7 +30,7 @@ export function injectStyleIntoDocument(settings: Section[]): void {
 
     const style: HTMLStyleElement = document.createElement('style');
     style.setAttribute('type', 'text/css');
-    style.setAttribute('data-simple-facebook-customizer', 'true');
+    style.setAttribute('data-simple-website-customizer', 'true');
     document.head.appendChild(style);
 
     const stylesheet: CSSStyleSheet = style.sheet;
@@ -37,7 +38,7 @@ export function injectStyleIntoDocument(settings: Section[]): void {
     /**
      * Highlight currently hovered element when picking element to create a custom option
      */
-    stylesheet.insertRule(`[data-simple-facebook-customizer-hover] {
+    stylesheet.insertRule(`[data-simple-website-customizer-hover] {
       box-shadow: inset 0 0 0 3px ${BRANDING_COLOR}, inset 0 0 0 9999px ${HOVER_ELEMENT_COLOR} !important;
       cursor: crosshair !important;
     }`);
@@ -59,9 +60,9 @@ export function injectStyleIntoDocument(settings: Section[]): void {
      * Overwrite default style from user defined custom settings
      */
     storage
-      .get<CustomSection[]>('customSettings')
+      .get<CustomSection[]>(window.location.origin)
       .then((customSettings: CustomSection[]): void => {
-        for (const section of customSettings) {
+        for (const section of customSettings ?? []) {
           for (const option of section.options) {
             storage
               .get<boolean>(option.name)

@@ -7,8 +7,8 @@ import { buildSimilarSelector, buildUniqueSelector } from '@content/modules/sele
 export function saveCustomSettingsOptionFromElement(element: Element): void {
   const runtime: UseChromeRuntimeReturn = useChromeRuntime();
 
-  const currentSection: CustomSection = window.simpleFacebookCustomizer.section;
-  const currentOption: CustomOption = window.simpleFacebookCustomizer.option;
+  const currentSection: CustomSection = window.simpleWebsiteCustomizer.section;
+  const currentOption: CustomOption = window.simpleWebsiteCustomizer.option;
 
   currentOption.selector = currentOption.selectSimilar
     ? buildSimilarSelector(element)

@@ -27,5 +27,5 @@ export function boot(): void {
     code: MessageCode.REQUEST_SETTINGS,
   });
 
-  window.simpleFacebookCustomizer = {};
+  window.simpleWebsiteCustomizer = {};
 }

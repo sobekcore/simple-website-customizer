@@ -1,7 +1,5 @@
-export const BRANDING_COLOR: string = '#1876f2';
+export const BRANDING_COLOR: string = '#7e5dff';
 
-export const HOVER_ELEMENT_COLOR: string = 'rgba(24, 118, 242, 50%)';
+export const HOVER_ELEMENT_COLOR: string = 'rgba(126, 93, 255, 50%)';
 
-export const FACEBOOK_REGEX: RegExp = new RegExp(/^https:\/\/\S*\.facebook\.com\/\S*/);
-
-export const CUSTOM_SETTINGS_KEY: string = 'customSettings';
+export const STORAGE_PREFIX: string = 'simpleWebsiteCustomizer';

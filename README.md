@@ -1,12 +1,12 @@
-# ![Simple Facebook Customizer](assets/marquee-promo.png)
+# ![Simple Website Customizer](assets/marquee-promo.png)
 
-[![Available in the Chrome Web Store](assets/services/chrome-web-store.png)](https://chrome.google.com/webstore/detail/simple-facebook-customize/lggklkfbhcbpdighlgjicacbddhjabni)
+[![Available in the Chrome Web Store](assets/services/chrome-web-store.png)](https://chromewebstore.google.com/detail/simple-website-customizer/lggklkfbhcbpdighlgjicacbddhjabni)
 
-Simple Facebook Customizer is an extension for Chromium-based browsers (Google Chrome, Microsoft Edge, Brave and more). It's main purpose is to change default Facebook look with any combination of either custom defined or predefined settings.
+Simple Website Customizer is an extension for Chromium-based browsers (Google Chrome, Microsoft Edge, Brave and more). It's main purpose is to change default websites look with any combination of either custom defined or predefined settings.
 
 Hiding various bars, notifications, messages and more! Remove elements that bother you, or you simply don't like the look of them.
 
-Need was the mother of this extension - installing an extension and simply checking wanted toggles is way easier than editing browser custom CSS's every time you want to make persistent stylesheet for a website - in this case Facebook.
+Need was the mother of this extension - installing an extension and simply checking wanted toggles is way easier than editing browser custom CSS's every time you want to make persistent stylesheet for a website.
 
 Feedback highly appreciated, ideas or requests for any features will be taken into account and maybe implemented in the near future.
 
