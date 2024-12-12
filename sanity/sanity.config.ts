@@ -6,7 +6,7 @@ import { SANITY_PROJECT_ID, SANITY_DATASET } from '../shared/sanity';
 
 export default defineConfig({
   name: 'default',
-  title: 'Simple Facebook Customizer',
+  title: 'Simple Website Customizer',
   projectId: SANITY_PROJECT_ID,
   dataset: SANITY_DATASET,
   plugins: [

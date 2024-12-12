@@ -8,7 +8,6 @@ import { CustomSection } from '@shared/interfaces/custom-section';
 import { UseChromeRuntimeReturn, useChromeRuntime } from '@shared/hooks/useChromeRuntime';
 import { UseChromeStorageReturn, useChromeStorage } from '@shared/hooks/useChromeStorage';
 import { UseChromeTabsReturn, useChromeTabs } from '@shared/hooks/useChromeTabs';
-import { CUSTOM_SETTINGS_KEY } from '@shared/const';
 import { SettingsContextData, SettingsContext } from '@popup/providers/SettingsProvider';
 import { CustomSettingsContextData, CustomSettingsContext, } from '@popup/providers/CustomSettingsProvider';
 import { UseComponentUpdateReturn, useComponentUpdate } from '@popup/hooks/useComponentUpdate';
@@ -32,16 +31,16 @@ export default function Settings(props: SettingsProps) {
 
   useEffect((): void => {
     runtime.addMessageListener(MessageCode.CHECK_IF_STYLE_IS_INJECTED, (message: MessageData): void => {
-      if (message.injected) {
-        settingsContext.setInjected(true);
-      }
-    });
+      storage
+        .get<CustomSection[]>(message.origin)
+        .then((customSettings: CustomSection[]): void => {
+          customSettingsContext.setSettings(customSettings ?? []);
 
-    storage
-      .get<CustomSection[]>(CUSTOM_SETTINGS_KEY)
-      .then((customSettings: CustomSection[]): void => {
-        customSettingsContext.setSettings(customSettings ?? []);
-      });
+          if (message.injected) {
+            settingsContext.setInjected(true);
+          }
+        });
+    });
 
     tabs.sendMessage({
       code: MessageCode.CHECK_IF_STYLE_IS_INJECTED,
@@ -64,12 +63,12 @@ export default function Settings(props: SettingsProps) {
 
   return (
     <main class="settings" data-injected={settingsContext.injected}>
-      {settingsContext.injected !== null && props.settings.length ? (
+      {settingsContext.injected !== null ? (
         <Fragment>
           {settingsContext.injected === false && (
             <SettingsMessage
               type="negative"
-              message="Styles could not be applied into current page. Make sure your location is any Facebook URL or try to refresh the page."
+              message="Styles could not be applied into current page. Make sure your location is any valid URL or try to refresh the page."
             />
           )}
           {!customSettingsContext.settings.find((section: CustomSection): boolean => section.state === SectionState.INIT) && (

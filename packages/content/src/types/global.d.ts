@@ -1,7 +1,7 @@
-import { SimpleFacebookCustomizer } from '@content/interfaces/simple-facebook-customizer';
+import { SimpleWebsiteCustomizer } from '@content/interfaces/simple-website-customizer';
 
 declare global {
   interface Window {
-    simpleFacebookCustomizer: SimpleFacebookCustomizer;
+    simpleWebsiteCustomizer: SimpleWebsiteCustomizer;
   }
 }

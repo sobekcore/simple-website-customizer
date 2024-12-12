@@ -9,7 +9,7 @@ export function useComponentUpdate(): UseComponentUpdateReturn {
 
   const forceUpdate = (): void => {
     setVersion((version: number): number => version + 1);
-  }
+  };
 
   return {
     forceUpdate,

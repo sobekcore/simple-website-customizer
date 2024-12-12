@@ -1,5 +1,5 @@
 {
-  "name": "@simple-facebook-customizer/sanity",
+  "name": "@simple-website-customizer/sanity",
   "scripts": {
     "dev": "sanity dev",
     "start": "sanity start",

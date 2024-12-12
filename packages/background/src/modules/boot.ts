@@ -4,7 +4,7 @@ import { UseChromeRuntimeReturn, useChromeRuntime } from '@shared/hooks/useChrom
 import { UseChromeTabsReturn, useChromeTabs } from '@shared/hooks/useChromeTabs';
 import { requestSettingsForContent } from '@background/modules/request-settings';
 import { saveCustomSettingsSection, removeCustomSettingsSection } from '@background/modules/settings-section';
-import { activateExtensionIcon } from '@background/modules/extension-icon';
+import { updateExtensionIcon } from '@background/modules/extension-icon';
 
 export function boot(): void {
   const runtime: UseChromeRuntimeReturn = useChromeRuntime();
@@ -22,7 +22,7 @@ export function boot(): void {
     removeCustomSettingsSection(message.section);
   });
 
-  tabs.addUpdateListener((tab: chrome.tabs.Tab): void => {
-    activateExtensionIcon(tab);
+  tabs.addUpdateListener((): void => {
+    updateExtensionIcon();
   });
 }

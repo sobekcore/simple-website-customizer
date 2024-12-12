@@ -29,8 +29,8 @@ export function checkIfElementExists(option: Option): void {
 }
 
 export function selectElementFromDocument(section: CustomSection, option: CustomOption): void {
-  window.simpleFacebookCustomizer.section = section;
-  window.simpleFacebookCustomizer.option = option;
+  window.simpleWebsiteCustomizer.section = section;
+  window.simpleWebsiteCustomizer.option = option;
 
   document.addEventListener('mouseover', mouseoverListenerCallback);
   document.addEventListener('keydown', keydownListenerCallback);
@@ -38,7 +38,7 @@ export function selectElementFromDocument(section: CustomSection, option: Custom
 
 export function selectElementFromDocumentCleanup(element?: Element): void {
   if (!element) {
-    element = document.querySelector('[data-simple-facebook-customizer-hover]');
+    element = document.querySelector('[data-simple-website-customizer-hover]');
   }
 
   if (element instanceof Element) {
@@ -52,16 +52,16 @@ export function selectElementFromDocumentCleanup(element?: Element): void {
   document.removeEventListener('mouseover', mouseoverListenerCallback);
   document.removeEventListener('keydown', keydownListenerCallback);
 
-  delete window.simpleFacebookCustomizer.section;
-  delete window.simpleFacebookCustomizer.option;
+  delete window.simpleWebsiteCustomizer.section;
+  delete window.simpleWebsiteCustomizer.option;
 }
 
 export function addHoverEffectIntoElement(element: Element): void {
-  element.setAttribute('data-simple-facebook-customizer-hover', 'true');
+  element.setAttribute('data-simple-website-customizer-hover', 'true');
 }
 
 export function removeHoverEffectFromElement(element: Element): void {
-  element.removeAttribute('data-simple-facebook-customizer-hover');
+  element.removeAttribute('data-simple-website-customizer-hover');
 }
 
 export function removeNestedHoverEffectFromElement(element: Element): void {

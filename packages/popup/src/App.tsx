@@ -14,11 +14,15 @@ export default function App() {
   const [settings, setSettings] = useState<Section[]>([]);
 
   useEffect((): void => {
-    sanityClient
-      .fetch(settingsOrderedQuery)
-      .then((response: { settings: Section[] }): void => {
-        setSettings(response.settings);
-      });
+    /**
+     * TODO: Reimplement predefined settings fetched from Sanity per origin
+     *
+     * sanityClient
+     *   .fetch(settingsOrderedQuery)
+     *   .then((response: { settings: Section[] }): void => {
+     *     setSettings(response.settings);
+     *   });
+     */
   }, []);
 
   return (
