@@ -10,6 +10,7 @@ import { UseChromeStorageReturn, useChromeStorage } from '@shared/hooks/useChrom
 import { UseChromeTabsReturn, useChromeTabs } from '@shared/hooks/useChromeTabs';
 import { SettingsContextData, SettingsContext } from '@popup/providers/SettingsProvider';
 import { CustomSettingsContextData, CustomSettingsContext, } from '@popup/providers/CustomSettingsProvider';
+import { UseRetryReturn, useRetry } from '@popup/hooks/useRetry';
 import { UseComponentUpdateReturn, useComponentUpdate } from '@popup/hooks/useComponentUpdate';
 import SettingsMessage from '@popup/components/SettingsMessage';
 import SettingsSection from '@popup/components/SettingsSection/SettingsSection';
@@ -24,6 +25,7 @@ interface SettingsProps {
 export default function Settings(props: SettingsProps) {
   const settingsContext: SettingsContextData = useContext(SettingsContext);
   const customSettingsContext: CustomSettingsContextData = useContext(CustomSettingsContext);
+  const retry: UseRetryReturn = useRetry({ amount: 3, timeout: 100 });
   const componentUpdate: UseComponentUpdateReturn = useComponentUpdate();
   const runtime: UseChromeRuntimeReturn = useChromeRuntime();
   const storage: UseChromeStorageReturn = useChromeStorage();
@@ -38,7 +40,14 @@ export default function Settings(props: SettingsProps) {
 
           if (message.injected) {
             settingsContext.setInjected(true);
+            return;
           }
+
+          retry.update((): void => {
+            tabs.sendMessage({
+              code: MessageCode.CHECK_IF_STYLE_IS_INJECTED,
+            }, true);
+          });
         });
     });
 
@@ -68,7 +77,7 @@ export default function Settings(props: SettingsProps) {
           {settingsContext.injected === false && (
             <SettingsMessage
               type="negative"
-              message="Styles could not be applied into current page. Make sure your location is any valid URL or try to refresh the page."
+              message="Settings could not be loaded from current page. Make sure your location is any valid URL, then try to reopen extension window or refresh the page."
             />
           )}
           {!customSettingsContext.settings.find((section: CustomSection): boolean => section.state === SectionState.INIT) && (

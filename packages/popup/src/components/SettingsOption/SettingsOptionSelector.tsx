@@ -35,15 +35,17 @@ export default function SettingsOptionSelector(props: SettingsOptionSelectorProp
   };
 
   const handleOnClick = (): void => {
-    tabs.sendMessage({
-      code: MessageCode.SELECT_ELEMENT_OPTION,
-      section: props.section,
-      option: props.option,
-    }, true);
-
-    if (props.onClick) {
-      props.onClick();
-    }
+    tabs
+      .sendMessage({
+        code: MessageCode.SELECT_ELEMENT_OPTION,
+        section: props.section,
+        option: props.option,
+      }, true)
+      .then((): void => {
+        if (props.onClick) {
+          props.onClick();
+        }
+      });
   };
 
   const handleOnInput = (event: JSX.TargetedEvent<HTMLInputElement, InputEvent>): void => {

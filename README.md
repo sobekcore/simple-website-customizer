@@ -4,7 +4,7 @@
 
 Simple Website Customizer is an extension for Chromium-based browsers (Google Chrome, Microsoft Edge, Brave and more). It's main purpose is to change default websites look with any combination of either custom defined or predefined settings.
 
-Hiding various bars, notifications, messages and more! Remove elements that bother you, or you simply don't like the look of them.
+Enlarge and shrink - change colors - move and hide various bars, notifications, messages and more! Modify elements that bother you, or you simply don't like the look of them.
 
 Need was the mother of this extension - installing an extension and simply checking wanted toggles is way easier than editing browser custom CSS's every time you want to make persistent stylesheet for a website.
 

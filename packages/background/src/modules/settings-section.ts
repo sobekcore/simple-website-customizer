@@ -1,6 +1,6 @@
 import { CustomSection } from '@shared/interfaces/custom-section';
 import { UseChromeStorageReturn, useChromeStorage } from '@shared/hooks/useChromeStorage';
-import { UseChromeTabsReturn, ActiveTabData, useChromeTabs } from '@shared/hooks/useChromeTabs';
+import { UseChromeTabsReturn, useChromeTabs } from '@shared/hooks/useChromeTabs';
 import { updateExtensionIcon } from '@background/modules/extension-icon';
 
 export function saveCustomSettingsSection(customSection: CustomSection): void {
@@ -8,12 +8,14 @@ export function saveCustomSettingsSection(customSection: CustomSection): void {
   const tabs: UseChromeTabsReturn = useChromeTabs();
 
   tabs
-    .getActiveTab()
-    .then((activeTab: ActiveTabData): void => {
+    .getActive()
+    .then((activeTab: chrome.tabs.Tab): void => {
       storage
-        .get<CustomSection[]>(activeTab.origin)
+        .get<CustomSection[]>(tabs.getOrigin(activeTab))
         .then((customSettings: CustomSection[]): void => {
           customSettings = customSettings ?? [];
+
+          const shouldUpdateExtensionIcon: boolean = customSettings.length === 0;
 
           const section: CustomSection = customSettings.find((section: CustomSection): boolean => {
             return section.name === customSection.name;
@@ -28,9 +30,11 @@ export function saveCustomSettingsSection(customSection: CustomSection): void {
           }
 
           storage
-            .set<CustomSection[]>(activeTab.origin, customSettings)
+            .set<CustomSection[]>(tabs.getOrigin(activeTab), customSettings)
             .then((): void => {
-              updateExtensionIcon();
+              if (shouldUpdateExtensionIcon) {
+                updateExtensionIcon();
+              }
             });
         });
     });
@@ -41,10 +45,10 @@ export function removeCustomSettingsSection(customSection: CustomSection): void 
   const tabs: UseChromeTabsReturn = useChromeTabs();
 
   tabs
-    .getActiveTab()
-    .then((activeTab: ActiveTabData): void => {
+    .getActive()
+    .then((activeTab: chrome.tabs.Tab): void => {
       storage
-        .get<CustomSection[]>(activeTab.origin)
+        .get<CustomSection[]>(tabs.getOrigin(activeTab))
         .then((customSettings: CustomSection[]): void => {
           customSettings = customSettings ?? [];
 
@@ -52,10 +56,14 @@ export function removeCustomSettingsSection(customSection: CustomSection): void 
             return section.name !== customSection.name;
           });
 
+          const shouldUpdateExtensionIcon: boolean = customSettings.length === 0;
+
           storage
-            .set<CustomSection[]>(activeTab.origin, customSettings)
+            .set<CustomSection[]>(tabs.getOrigin(activeTab), customSettings)
             .then((): void => {
-              updateExtensionIcon();
+              if (shouldUpdateExtensionIcon) {
+                updateExtensionIcon();
+              }
             });
         });
     });

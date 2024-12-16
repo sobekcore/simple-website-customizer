@@ -2,13 +2,10 @@ import { MessageData } from '@shared/interfaces/message-data';
 
 export interface UseChromeTabsReturn {
   addUpdateListener(callback: UpdateListenerCallback): void;
-  sendMessage(message: MessageData, active?: boolean): void;
-  getActiveTab(): Promise<ActiveTabData>;
-}
-
-export interface ActiveTabData {
-  tab: chrome.tabs.Tab;
-  origin: string;
+  sendMessage(message: MessageData, active?: boolean): Promise<void>;
+  getActive(): Promise<chrome.tabs.Tab>;
+  getAll(activeTab: chrome.tabs.Tab): Promise<chrome.tabs.Tab[]>;
+  getOrigin(tab: chrome.tabs.Tab): string;
 }
 
 type UpdateListenerCallback = (tab: chrome.tabs.Tab) => void;
@@ -20,22 +17,34 @@ export function useChromeTabs(): UseChromeTabsReturn {
     });
   };
 
-  const sendMessage = (message: MessageData, active?: boolean): void => {
-    const queryInfo: chrome.tabs.QueryInfo = {};
+  const sendMessage = (message: MessageData, active?: boolean): Promise<void> => {
+    return new Promise((resolve): void => {
+      const finalize = (tabs: chrome.tabs.Tab[]): void => {
+        for (const tab of tabs) {
+          chrome.tabs
+            .sendMessage(tab.id, message)
+            .catch((): void => {
+              console.info(`Message cannot be sent, extension is not active in tab: ${tab.id}`);
+            });
+        }
 
-    if (active) {
-      queryInfo.active = true;
-      queryInfo.currentWindow = true;
-    }
+        resolve();
+      };
 
-    chrome.tabs.query(queryInfo, (tabs: chrome.tabs.Tab[]): void => {
-      for (const tab of tabs) {
-        chrome.tabs.sendMessage(tab.id, message);
-      }
+      getActive().then((activeTab: chrome.tabs.Tab): void => {
+        if (active) {
+          finalize([activeTab]);
+          return;
+        }
+
+        getAll(activeTab).then((tabs: chrome.tabs.Tab[]): void => {
+          finalize(tabs);
+        });
+      });
     });
   };
 
-  const getActiveTab = (): Promise<ActiveTabData> => {
+  const getActive = (): Promise<chrome.tabs.Tab> => {
     return new Promise((resolve): void => {
       const queryInfo: chrome.tabs.QueryInfo = {
         active: true,
@@ -43,19 +52,34 @@ export function useChromeTabs(): UseChromeTabsReturn {
       };
 
       chrome.tabs.query(queryInfo, ([tab]: chrome.tabs.Tab[]): void => {
-        const url: URL = new URL(tab.url);
-
-        resolve({
-          tab: tab,
-          origin: url.origin,
-        });
+        if (tab) {
+          resolve(tab);
+        }
       });
     });
+  };
+
+  const getAll = (activeTab: chrome.tabs.Tab): Promise<chrome.tabs.Tab[]> => {
+    return new Promise((resolve): void => {
+      const queryInfo: chrome.tabs.QueryInfo = {
+        url: `${getOrigin(activeTab)}/*`,
+      };
+
+      chrome.tabs.query(queryInfo, (tabs: chrome.tabs.Tab[]): void => {
+        resolve(tabs);
+      });
+    });
+  };
+
+  const getOrigin = (tab: chrome.tabs.Tab): string => {
+    return new URL(tab.url).origin;
   };
 
   return {
     addUpdateListener,
     sendMessage,
-    getActiveTab,
+    getActive,
+    getAll,
+    getOrigin,
   };
 }
