@@ -43,7 +43,7 @@ export function useCustomSettings(): UseCustomSettingsReturn {
   };
 
   const hasOptionFunctionalityChanged = (option: CustomOption): boolean => {
-    return option.selector !== option.previous.selector || option.style !== option.previous.style;
+    return option.previous && (option.selector !== option.previous.selector || option.style !== option.previous.style);
   };
 
   return {

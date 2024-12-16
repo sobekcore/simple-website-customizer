@@ -45,8 +45,8 @@ const filesToZip = [
 
 try {
   output.on('close', () => {
-    console.log(`${archive.pointer()} total bytes`);
-    console.log('files have been archived');
+    console.info(`${archive.pointer()} total bytes`);
+    console.info('files have been archived');
   });
 
   archive.on('error', (error) => {

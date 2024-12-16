@@ -1,6 +1,6 @@
 import { CustomSection } from '@shared/interfaces/custom-section';
 import { UseChromeStorageReturn, useChromeStorage } from '@shared/hooks/useChromeStorage';
-import { UseChromeTabsReturn, ActiveTabData, useChromeTabs } from '@shared/hooks/useChromeTabs';
+import { UseChromeTabsReturn, useChromeTabs } from '@shared/hooks/useChromeTabs';
 
 const icons: Record<number, string> = {
   16: '/icons/16.png',
@@ -19,15 +19,21 @@ export function updateExtensionIcon(): void {
   const tabs: UseChromeTabsReturn = useChromeTabs();
 
   tabs
-    .getActiveTab()
-    .then((activeTab: ActiveTabData): void => {
+    .getActive()
+    .then((activeTab: chrome.tabs.Tab): void => {
       storage
-        .get<CustomSection[]>(activeTab.origin)
+        .get<CustomSection[]>(tabs.getOrigin(activeTab))
         .then((customSettings: CustomSection[]): void => {
-          chrome.action.setIcon({
-            tabId: activeTab.tab.id,
-            path: customSettings?.length ? icons : inactiveIcons,
-          });
+          tabs
+            .getAll(activeTab)
+            .then((tabs: chrome.tabs.Tab[]): void => {
+              for (const tab of tabs) {
+                chrome.action.setIcon({
+                  tabId: tab.id,
+                  path: customSettings?.length ? icons : inactiveIcons,
+                });
+              }
+            });
         });
     });
 }

@@ -1,7 +1,7 @@
 {
   "name": "simple-website-customizer",
   "description": "Customize websites any way you want",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "watch": "webpack watch --config webpack.config.js",
     "build": "webpack --config webpack.config.js",
